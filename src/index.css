@@ -1,0 +1,8 @@
+/* پایه‌های ظاهری عمومی */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: #f7fafc; color: #1a202c; }
+
+/* تایپوگرافی پایه */
+:root { --font-fa: 'Vazirmatn', Tahoma, Arial, sans-serif; }
+body, button, input, textarea { font-family: var(--font-fa); }
