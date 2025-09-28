@@ -5,6 +5,7 @@
   --fg: #e9ecf1;
   --muted: #a9b1bb;
   --primary: #7aa2f7;
+  --accent: #f472b6;
   --card: #1b1e2b;
   --border: #2a2f3a;
   --shadow: 0 6px 24px rgba(0,0,0,.25);
@@ -17,6 +18,7 @@
   --fg: #0e1320;
   --muted: #5b6573;
   --primary: #3b6cf0;
+  --accent: #db2777;
   --card: #ffffff;
   --border: #e7e9ef;
   --shadow: 0 6px 24px rgba(0,0,0,.08);
@@ -43,6 +45,34 @@ a { color: inherit; text-decoration: none; }
 .section-head h2 { margin: 0 0 8px; font-size: 28px; }
 .muted { color: var(--muted); }
 
+/* Emphasize and center Gallery title */
+#gallery { min-height: 80svh; display: grid; align-items: center; }
+#gallery .container { display: grid; place-items: center; }
+#gallery .section-head { display: grid; place-items: center; text-align: center; margin: 0; width: 100%; }
+#gallery .section-head h2 { font-size: clamp(48px, 9vw, 96px); letter-spacing: -0.02em; margin: 0; text-align: center; }
+
+/* Circular avatar above title */
+.avatar-wrap { display: grid; place-items: center; margin-bottom: 8px; position: relative; }
+.avatar { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; 
+  /* Focus on face area; tweak with CSS vars if needed */
+  object-position: var(--avatar-x, 50%) var(--avatar-y, 32%);
+  border: 6px solid var(--frame); box-shadow: var(--shadow); 
+}
+.avatar.fantasy {
+  filter: saturate(1.25) contrast(1.08) brightness(1.05) hue-rotate(18deg);
+}
+.avatar-wrap::before { content: ""; position: absolute; inset: -10px; border-radius: 50%; pointer-events: none; background:
+  conic-gradient(from 0deg, color-mix(in srgb, var(--primary), transparent 35%) 0 25%, transparent 25% 50%, color-mix(in srgb, var(--primary), transparent 35%) 50% 75%, transparent 75% 100%);
+  filter: blur(8px) opacity(.6);
+}
+.avatar:hover { transform: translateY(-2px); transition: transform .2s ease; }
+
+/* Prompt actions */
+.prompt-actions { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 2px; flex-wrap: nowrap; }
+.prompt-actions .btn { font-size: 16px; padding: 12px 18px; border-radius: 999px; }
+.prompt-editor { width: min(720px, 92vw); margin: 10px auto 0; }
+.prompt-editor textarea { width: 100%; background: var(--card); color: var(--fg); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; font-family: inherit; resize: vertical; }
+
 /* Accessibility */
 .skip-link {
   position: absolute; inset-inline-start: 8px; top: 8px; z-index: 1000;
@@ -65,6 +95,7 @@ a { color: inherit; text-decoration: none; }
 .btn { border: 1px solid var(--border); background: transparent; color: var(--fg); padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 700; transition: transform .05s ease, background .2s, color .2s; }
 .btn:hover { transform: translateY(-1px); }
 .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.ghost { background: color-mix(in srgb, var(--bg), transparent 40%); }
 
 /* Hero (Fullscreen Minimal) */
@@ -102,6 +133,15 @@ a { color: inherit; text-decoration: none; }
 .masonry .card { display: inline-block; width: 100%; margin: 0 0 16px; break-inside: avoid; -webkit-column-break-inside: avoid; }
 .masonry .card img { width: 100%; height: auto; border: 8px solid var(--frame); border-radius: 10px; box-shadow: var(--shadow); transition: transform .2s ease; }
 .masonry .card img:hover { transform: translateY(-2px); }
+
+/* Download button overlay */
+.dl-btn { position: absolute; inset-inline-end: 10px; top: 10px; z-index: 2; 
+  background: rgba(0,0,0,.55); color: #fff; border: 1px solid color-mix(in srgb, #fff, transparent 70%);
+  width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; cursor: pointer;
+  opacity: 1; transform: translateY(0); transition: opacity .2s ease, transform .2s ease; }
+.card:hover .dl-btn, .dl-btn:focus { opacity: 1; transform: translateY(0); }
+.dl-btn:hover { background: rgba(0,0,0,.7); }
+.dl-btn svg { width: 18px; height: 18px; }
 
 @media (max-width: 980px) { .masonry { column-count: 2; } }
 @media (max-width: 560px) { .masonry { column-count: 1; } }

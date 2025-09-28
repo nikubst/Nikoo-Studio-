@@ -57,8 +57,47 @@
       });
       c.dataset.lbBound = '1';
     });
+
+    // Add download buttons
+    cards.forEach(c => {
+      if (c.querySelector('.dl-btn')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dl-btn';
+      btn.setAttribute('aria-label', 'Download image');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const url = c.getAttribute('href');
+        const name = (c.getAttribute('data-title') || 'artwork').replace(/\s+/g,'-').toLowerCase() + '.jpg';
+        if (!url) return;
+        try {
+          const res = await fetch(url, { mode: 'cors' });
+          const blob = await res.blob();
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          a.href = objectUrl;
+          a.download = name;
+          document.body.appendChild(a);
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+          a.remove();
+        } catch (err) {
+          // Fallback: open in new tab
+          window.open(url, '_blank');
+        }
+      });
+      c.appendChild(btn);
+    });
   }
   bindCards();
+  // Observe for future changes so all items always have download buttons/lightbox
+  const container = document.querySelector('.masonry');
+  if (container && 'MutationObserver' in window) {
+    const mo = new MutationObserver(() => bindCards());
+    mo.observe(container, { childList: true, subtree: true });
+  }
   closeBtn?.addEventListener('click', close);
   lb?.addEventListener('click', (e) => { if (e.target === lb) close(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb?.classList.contains('open')) close(); });
@@ -87,6 +126,35 @@
       b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
     });
     applyFilter(key);
+  });
+})();
+
+// Prompt actions (New Prompt / Copy Prompt)
+(function(){
+  const newBtn = document.getElementById('newPromptBtn');
+  const copyBtn = document.getElementById('copyPromptBtn');
+  const editor = document.getElementById('promptEditor');
+  const input = document.getElementById('promptInput');
+  if (!newBtn || !copyBtn) return;
+  newBtn.addEventListener('click', () => {
+    editor?.classList.remove('hidden');
+    input?.focus();
+    input?.select();
+  });
+  copyBtn.addEventListener('click', async () => {
+    const text = input?.value || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      const prev = copyBtn.textContent;
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = prev; }, 1200);
+    } catch (err) {
+      // Fallback
+      input?.select();
+      const prev = copyBtn.textContent;
+      copyBtn.textContent = 'Press ⌘/Ctrl+C';
+      setTimeout(() => { copyBtn.textContent = prev; }, 1500);
+    }
   });
 })();
 
