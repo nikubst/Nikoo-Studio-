@@ -90,6 +90,39 @@
       });
       c.appendChild(btn);
     });
+
+    // Add download button for avatar image (outside gallery)
+    const avWrap = document.querySelector('.avatar-wrap');
+    const avImg = avWrap?.querySelector('img');
+    if (avWrap && avImg && !avWrap.querySelector('.dl-btn')) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dl-btn';
+      btn.setAttribute('aria-label', 'Download avatar');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const url = avImg.getAttribute('src');
+        const name = 'avatar.jpg';
+        if (!url) return;
+        try {
+          const res = await fetch(url, { mode: 'cors' });
+          const blob = await res.blob();
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          a.href = objectUrl;
+          a.download = name;
+          document.body.appendChild(a);
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+          a.remove();
+        } catch (err) {
+          window.open(url, '_blank');
+        }
+      });
+      avWrap.appendChild(btn);
+    }
   }
   bindCards();
   // Observe for future changes so all items always have download buttons/lightbox
