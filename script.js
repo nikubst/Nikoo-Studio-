@@ -58,37 +58,45 @@
       c.dataset.lbBound = '1';
     });
 
-    // Add download buttons
+    // Ensure every card has a visible download icon and it works
     cards.forEach(c => {
-      if (c.querySelector('.dl-btn')) return;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'dl-btn';
-      btn.setAttribute('aria-label', 'Download image');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        const url = c.getAttribute('href');
-        const name = (c.getAttribute('data-title') || 'artwork').replace(/\s+/g,'-').toLowerCase() + '.jpg';
-        if (!url) return;
-        try {
-          const res = await fetch(url, { mode: 'cors' });
-          const blob = await res.blob();
-          const a = document.createElement('a');
-          const objectUrl = URL.createObjectURL(blob);
-          a.href = objectUrl;
-          a.download = name;
-          document.body.appendChild(a);
-          a.click();
-          URL.revokeObjectURL(objectUrl);
-          a.remove();
-        } catch (err) {
-          // Fallback: open in new tab
-          window.open(url, '_blank');
-        }
-      });
-      c.appendChild(btn);
+      // If a dl-btn already exists (static in HTML), just bind it. Otherwise create one.
+      let btn = c.querySelector('.dl-btn');
+      if (!btn) {
+        btn = document.createElement('span');
+        btn.className = 'dl-btn';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('tabindex', '0');
+        btn.setAttribute('aria-label', 'Download image');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        c.appendChild(btn);
+      }
+      if (!btn.dataset.bound) {
+        const handler = async (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const url = btn.getAttribute('href') || btn.dataset.download || c.getAttribute('href');
+          const name = (c.getAttribute('data-title') || 'artwork').replace(/\s+/g,'-').toLowerCase() + '.jpg';
+          if (!url) return;
+          try {
+            const res = await fetch(url, { mode: 'cors' });
+            const blob = await res.blob();
+            const a = document.createElement('a');
+            const objectUrl = URL.createObjectURL(blob);
+            a.href = objectUrl;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+            a.remove();
+          } catch (err) {
+            window.open(url, '_blank');
+          }
+        };
+        btn.addEventListener('click', handler);
+        btn.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') handler(ev); });
+        btn.dataset.bound = '1';
+      }
     });
 
     // Add download button for avatar image (outside gallery)
@@ -135,18 +143,15 @@
   lb?.addEventListener('click', (e) => { if (e.target === lb) close(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb?.classList.contains('open')) close(); });
 })();
-
 // Filters for Masonry
 (function(){
   const bar = document.getElementById('filters');
   const container = document.querySelector('.masonry');
   if (!bar || !container) return;
-  const items = Array.from(container.querySelectorAll('.card'));
   function applyFilter(key){
+    const items = container.querySelectorAll('.card');
     items.forEach(el => {
-      const cats = (el.getAttribute('data-category') || '').split(/\s+/).filter(Boolean);
-      const show = key === 'all' || cats.includes(key);
-      el.style.display = show ? 'inline-block' : 'none';
+      const cat = el.getAttribute('data-category');
     });
   }
   bar.addEventListener('click', (e) => {
@@ -162,35 +167,6 @@
   });
 })();
 
-// Prompt actions (New Prompt / Copy Prompt)
-(function(){
-  const newBtn = document.getElementById('newPromptBtn');
-  const copyBtn = document.getElementById('copyPromptBtn');
-  const editor = document.getElementById('promptEditor');
-  const input = document.getElementById('promptInput');
-  if (!newBtn || !copyBtn) return;
-  newBtn.addEventListener('click', () => {
-    editor?.classList.remove('hidden');
-    input?.focus();
-    input?.select();
-  });
-  copyBtn.addEventListener('click', async () => {
-    const text = input?.value || '';
-    try {
-      await navigator.clipboard.writeText(text);
-      const prev = copyBtn.textContent;
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => { copyBtn.textContent = prev; }, 1200);
-    } catch (err) {
-      // Fallback
-      input?.select();
-      const prev = copyBtn.textContent;
-      copyBtn.textContent = 'Press ⌘/Ctrl+C';
-      setTimeout(() => { copyBtn.textContent = prev; }, 1500);
-    }
-  });
-})();
-
 // Contact form basic client-side validation
 (function(){
   const form = document.getElementById('contactForm');
@@ -203,13 +179,70 @@
     const email = data.get('email');
     const message = data.get('message');
     if (!name || !email || !message) {
-      note.textContent = 'Please fill in all required fields.';
-      note.style.color = '#f87171';
+      if (note) note.textContent = 'Please fill in all fields.';
       return;
     }
-    // Demo only
-    note.textContent = 'Your message has been submitted. We will get back to you soon.';
-    note.style.color = '#10b981';
+    if (note) {
+      note.textContent = 'Your message has been submitted. We will get back to you soon.';
+      note.style.color = '#10b981';
+    }
     form.reset();
   });
+})();
+
+// Global download button for all images site-wide (outside gallery/avatar)
+(function(){
+  function addDlForImage(img){
+    if (!img || img.closest('.masonry .card') || img.closest('.avatar-wrap')) return;
+    if (img.closest('.img-wrap')) return;
+    const wrap = document.createElement('span');
+    wrap.className = 'img-wrap';
+    img.parentNode.insertBefore(wrap, img);
+    wrap.appendChild(img);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dl-btn';
+    btn.setAttribute('aria-label', 'Download image');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const url = img.currentSrc || img.src;
+      const base = (img.getAttribute('alt') || 'image').trim() || 'image';
+      const name = base.replace(/\s+/g,'-').toLowerCase() + '.jpg';
+      try {
+        const res = await fetch(url, { mode: 'cors' });
+        const blob = await res.blob();
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+        a.remove();
+      } catch (err) {
+        window.open(url, '_blank');
+      }
+    });
+    wrap.appendChild(btn);
+  }
+
+  // Initial pass
+  document.querySelectorAll('img').forEach(addDlForImage);
+
+  // Observe future images
+  if ('MutationObserver' in window) {
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            if (node.tagName === 'IMG') addDlForImage(node);
+            node.querySelectorAll?.('img').forEach(addDlForImage);
+          }
+        });
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
 })();
