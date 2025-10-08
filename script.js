@@ -5,6 +5,7 @@
   const saved = localStorage.getItem('theme');
   if (saved) root.setAttribute('data-theme', saved);
   function updateAria(){
+    if (!btn) return;
     const mode = root.getAttribute('data-theme') || 'dark';
     btn.setAttribute('aria-pressed', String(mode !== 'dark'));
   }
@@ -15,7 +16,7 @@
     localStorage.setItem('theme', next);
     updateAria();
   });
-  updateAria();
+  if (btn) updateAria();
 })();
 
 // Year in footer
@@ -58,9 +59,8 @@
       c.dataset.lbBound = '1';
     });
 
-    // Ensure every card has a visible download icon and it works
+    // Ensure each card has a download button overlay (icon-only)
     cards.forEach(c => {
-      // If a dl-btn already exists (static in HTML), just bind it. Otherwise create one.
       let btn = c.querySelector('.dl-btn');
       if (!btn) {
         btn = document.createElement('span');
@@ -102,6 +102,7 @@
     // Add download button for avatar image (outside gallery)
     const avWrap = document.querySelector('.avatar-wrap');
     const avImg = avWrap?.querySelector('img');
+    // Add download button for avatar image (outside gallery)
     if (avWrap && avImg && !avWrap.querySelector('.dl-btn')) {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -150,8 +151,12 @@
   if (!bar || !container) return;
   function applyFilter(key){
     const items = container.querySelectorAll('.card');
+    const showAll = !key || key === 'all';
     items.forEach(el => {
-      const cat = el.getAttribute('data-category');
+      const cat = el.getAttribute('data-category') || '';
+      const match = showAll || cat === key;
+      el.style.display = match ? 'inline-block' : 'none';
+      el.setAttribute('aria-hidden', match ? 'false' : 'true');
     });
   }
   bar.addEventListener('click', (e) => {
@@ -165,6 +170,8 @@
     });
     applyFilter(key);
   });
+  // Initialize with 'all'
+  applyFilter('all');
 })();
 
 // Contact form basic client-side validation

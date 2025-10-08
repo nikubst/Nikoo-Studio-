@@ -28,6 +28,7 @@
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 html, body { height: 100%; }
 body {
   margin: 0;
@@ -42,6 +43,8 @@ body {
   background-blend-mode: normal, multiply, multiply, normal;
   color: var(--fg);
   line-height: 1.8;
+  /* Reserve space for fixed header */
+  padding-top: 64px;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
@@ -92,17 +95,18 @@ a { color: inherit; text-decoration: none; }
 
 /* Header (Fullscreen Minimal) */
 .site-header { position: absolute; top: 0; inset-inline: 0; background: transparent; border-bottom: none; z-index: 10; }
-.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 60; backdrop-filter: blur(8px); background: color-mix(in srgb, var(--bg), transparent 20%); border-bottom: 1px solid color-mix(in srgb, var(--border), transparent 30%); }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
 .logo { width: 28px; height: 28px; display: grid; place-items: center; background: var(--primary); color: #fff; border-radius: 8px; box-shadow: var(--shadow); }
-.nav { display: flex; gap: 18px; }
-.nav a { color: var(--muted); font-weight: 600; }
-.nav a:hover, .nav a:focus { color: var(--fg); }
+.nav { display: flex; gap: 8px; }
+.nav a { color: var(--muted); font-weight: 700; padding: 8px 12px; border-radius: 10px; }
+.nav a:hover, .nav a:focus-visible { color: var(--fg); background: color-mix(in srgb, var(--bg), transparent 50%); outline: none; }
 .actions { display: flex; gap: 8px; align-items: center; }
 
 /* Buttons */
 .btn { border: 1px solid var(--border); background: transparent; color: var(--fg); padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 700; transition: transform .05s ease, background .2s, color .2s; }
 .btn:hover { transform: translateY(-1px); }
+.btn:focus-visible { outline: 2px solid color-mix(in srgb, var(--primary), transparent 30%); outline-offset: 2px; }
 .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
 .btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.ghost { background: color-mix(in srgb, var(--bg), transparent 40%); }
@@ -137,23 +141,25 @@ a { color: inherit; text-decoration: none; }
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 18px; }
 .btn.chip { border-radius: 999px; padding: 8px 12px; font-weight: 700; border-color: color-mix(in srgb, var(--border), transparent 30%); background: color-mix(in srgb, var(--bg), transparent 50%); color: var(--muted); }
 .btn.chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn.chip:hover { transform: translateY(-1px); }
 
 .masonry { column-count: 3; column-gap: 18px; }
 .masonry .card { display: inline-block; width: 100%; margin: 0 0 18px; break-inside: avoid; -webkit-column-break-inside: avoid; position: relative; }
 .masonry .card img { width: 100%; height: auto; border: 6px solid var(--frame); border-radius: 14px; box-shadow: 0 8px 22px rgba(0,0,0,.18); transition: transform .2s ease, box-shadow .2s ease; outline: 1px solid rgba(0,0,0,.045); }
 .masonry .card img:hover { transform: translateY(-2px); }
+.masonry .card img:hover { box-shadow: 0 12px 26px rgba(0,0,0,.24); }
 
-/* Download button overlay */
-.dl-btn { position: absolute; inset-inline-end: 10px; top: 10px; z-index: 3; 
-  background: rgba(0,0,0,.7); color: #fff; border: 1px solid rgba(255,255,255,.35);
+/* Sticky filter bar just below header */
+.filters { position: sticky; top: 64px; z-index: 40; background: color-mix(in srgb, var(--bg), transparent 12%); backdrop-filter: blur(6px); padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--border), transparent 30%); }
+
+/* Download button overlay (icon-only, no tooltip text) */
+.dl-btn { position: absolute; inset-inline-end: 10px; top: 10px; z-index: 3;
+  background: rgba(0,0,0,.75); color: #fff; border: 1px solid rgba(255,255,255,.35);
   width: 42px; height: 42px; border-radius: 999px; display: grid; place-items: center; cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,.35); opacity: 1; transform: translateY(0); transition: opacity .2s ease, transform .2s ease; }
+  box-shadow: 0 4px 16px rgba(0,0,0,.35); opacity: 0; transform: translateY(-4px); transition: opacity .2s ease, transform .2s ease; }
 .card:hover .dl-btn, .dl-btn:focus { opacity: 1; transform: translateY(0); }
-.dl-btn:hover { background: rgba(0,0,0,.82); }
+.dl-btn:hover { background: rgba(0,0,0,.85); }
 .dl-btn svg { width: 20px; height: 20px; }
-.dl-btn::after { content: "دانلود"; position: absolute; inset-inline-end: 52px; top: 50%; transform: translateY(-50%); 
-  background: rgba(0,0,0,.65); color: #fff; font-size: 12px; padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,.25);
-  box-shadow: 0 2px 10px rgba(0,0,0,.25); white-space: nowrap; }
 
 /* Wrapper for generic images site-wide */
 .img-wrap { position: relative; display: inline-block; }
