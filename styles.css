@@ -152,6 +152,8 @@ a { color: inherit; text-decoration: none; }
 /* Sticky filter bar just below header */
 .filters { position: sticky; top: 64px; z-index: 40; background: color-mix(in srgb, var(--bg), transparent 12%); backdrop-filter: blur(6px); padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--border), transparent 30%); }
 
+/* (Film & Animation styles removed) */
+
 /* Download button overlay (icon-only, no tooltip text) */
 .dl-btn { position: absolute; inset-inline-end: 10px; top: 10px; z-index: 3;
   background: rgba(0,0,0,.75); color: #fff; border: 1px solid rgba(255,255,255,.35);
