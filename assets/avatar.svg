@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Beautiful girl avatar">
+  <defs>
+    <!-- Background glow -->
+    <radialGradient id="bg" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#fff3f8"/>
+      <stop offset="100%" stop-color="#f1e6ff"/>
+    </radialGradient>
+    <!-- Skin gradient -->
+    <linearGradient id="skin" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe1cc"/>
+      <stop offset="100%" stop-color="#ffd1b3"/>
+    </linearGradient>
+    <!-- Hair shine -->
+    <linearGradient id="hair" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2b2333"/>
+      <stop offset="100%" stop-color="#3a2a46"/>
+    </linearGradient>
+    <!-- Dress gradient -->
+    <linearGradient id="dress" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff7aa8"/>
+      <stop offset="100%" stop-color="#f35690"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="230" fill="#fff" fill-opacity="0.55"/>
+
+  <!-- Neck -->
+  <rect x="238" y="230" width="36" height="22" rx="8" fill="url(#skin)"/>
+
+  <!-- Face (oval) -->
+  <ellipse cx="256" cy="205" rx="56" ry="52" fill="url(#skin)"/>
+
+  <!-- Hair -->
+  <path fill="url(#hair)" d="M198 206c5-38 36-68 79-67 38 1 67 21 76 58 6 26-2 49-9 63-17-18-38-28-61-28s-44 11-63 32c-6-12-17-34-22-58z"/>
+  <!-- Hair underside shadow -->
+  <path fill="#201a25" fill-opacity="0.35" d="M214 228c16-12 28-16 42-17 18-2 34 2 52 12-15-4-29-6-42-4-16 2-33 6-52 9z"/>
+
+  <!-- Eyes -->
+  <ellipse cx="238" cy="205" rx="6.5" ry="5" fill="#2b2333"/>
+  <ellipse cx="274" cy="205" rx="6.5" ry="5" fill="#2b2333"/>
+  <!-- Smile -->
+  <path d="M238 222c6 6 24 6 30 0" stroke="#c06" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <!-- Blush -->
+  <ellipse cx="228" cy="212" rx="9" ry="6" fill="#ff9eb8" fill-opacity="0.35"/>
+  <ellipse cx="284" cy="212" rx="9" ry="6" fill="#ff9eb8" fill-opacity="0.35"/>
+
+  <!-- Dress (top) -->
+  <path d="M176 360c0-58 36-110 80-110s80 52 80 110v16H176z" fill="url(#dress)"/>
+  <!-- Dress hem shadow -->
+  <path d="M176 376h160c-10 22-42 36-80 36s-70-14-80-36z" fill="#e44f8a"/>
+  <!-- Shoulders -->
+  <path d="M184 304c18-26 44-44 72-52-22 6-44 22-60 48l-12 4zm144 0l-12-4c-16-26-38-42-60-48 28 8 54 26 72 52z" fill="#ff9eb8" fill-opacity="0.45"/>
+
+  <!-- Accent sparkle -->
+  <g fill="#ffd8ea" opacity="0.8">
+    <circle cx="196" cy="120" r="3"/>
+    <circle cx="320" cy="132" r="2.5"/>
+    <circle cx="360" cy="168" r="2.5"/>
+  </g>
+</svg>
