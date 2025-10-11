@@ -12,6 +12,29 @@
   --border: #2a2f3a;
   --shadow: 0 6px 24px rgba(0,0,0,.25);
   --frame: #faf7f0; /* softer frame for artworks */
+  /* Artistic tints for background blotches */
+  --art-1: color-mix(in srgb, var(--accent), #ffffff 82%);
+  --art-2: color-mix(in srgb, var(--primary), #ffffff 84%);
+  /* Visible palette swatches (can be tuned) */
+  --pal-1: var(--primary);
+  --pal-2: var(--accent);
+  --pal-3: #f5c77f;  /* warm ochre */
+  --pal-4: #8bd3c7;  /* mint teal */
+  --pal-5: #c3b5ff;  /* soft lavender */
+}
+.hero h1 {
+  position: relative;
+}
+.hero h1::after {
+  content: "";
+  display: block;
+  width: clamp(140px, 35%, 260px);
+  height: 14px;
+  margin: 10px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent), var(--primary) 40%));
+  filter: blur(2px) saturate(1.2);
+  opacity: .55;
 }
 
 :root[data-theme="light"] {
@@ -36,15 +59,32 @@ body {
   /* Paper Art background */
   background-color: var(--bg);
   background-image:
+    /* soft painterly blotches */
+    radial-gradient(900px 700px at 12% 8%, color-mix(in srgb, var(--art-1), transparent 90%), transparent 60%),
+    radial-gradient(1000px 800px at 88% 18%, color-mix(in srgb, var(--art-2), transparent 90%), transparent 62%),
+    /* subtle top glow */
     radial-gradient(1200px 800px at 50% -20%, rgba(255,255,255,.35), transparent 60%),
+    /* paper grain lines */
     repeating-linear-gradient(0deg, rgba(0,0,0,.018) 0 2px, transparent 2px 6px),
     repeating-linear-gradient(90deg, rgba(0,0,0,.012) 0 1px, transparent 1px 4px),
+    /* base wash */
     linear-gradient(0deg, color-mix(in srgb, var(--paper), transparent 0%), color-mix(in srgb, var(--paper), transparent 0%));
-  background-blend-mode: normal, multiply, multiply, normal;
+  background-blend-mode: soft-light, soft-light, normal, multiply, multiply, normal;
   color: var(--fg);
   line-height: 1.8;
   /* Reserve space for fixed header */
   padding-top: 64px;
+}
+
+/* Subtle page vignette for depth */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 700px at 50% 10%, transparent, transparent 60%, rgba(0,0,0,.06) 100%);
+  mix-blend-mode: multiply;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
@@ -58,10 +98,37 @@ a { color: inherit; text-decoration: none; }
 .muted { color: var(--muted); }
 
 /* Emphasize and center Gallery title */
-#gallery { min-height: 80svh; display: grid; align-items: center; }
+#gallery { min-height: 80svh; display: grid; align-items: center; position: relative; overflow: hidden; background: linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 3%), var(--bg)); }
 #gallery .container { display: grid; place-items: center; }
 #gallery .section-head { display: grid; place-items: center; text-align: center; margin: 0; width: 100%; }
 #gallery .section-head h2 { font-size: clamp(48px, 9vw, 96px); letter-spacing: -0.02em; margin: 0; text-align: center; }
+
+/* Palette overlay for Gallery */
+#gallery::before {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(closest-side, color-mix(in srgb, var(--pal-1), #ffffff 25%) 0 120px, transparent 121px),
+    radial-gradient(closest-side, color-mix(in srgb, var(--pal-2), #ffffff 25%) 0 110px, transparent 111px),
+    radial-gradient(closest-side, color-mix(in srgb, var(--pal-3), #ffffff 25%) 0 100px, transparent 101px),
+    radial-gradient(closest-side, color-mix(in srgb, var(--pal-4), #ffffff 25%) 0 90px, transparent 91px),
+    radial-gradient(closest-side, color-mix(in srgb, var(--pal-5), #ffffff 25%) 0 95px, transparent 96px);
+  background-repeat: no-repeat;
+  background-position:
+    left 6% top 14%,
+    right 8% top 10%,
+    left 16% bottom 18%,
+    right 14% bottom 16%,
+    center 84%;
+  background-size:
+    320px 320px,
+    280px 280px,
+    240px 240px,
+    220px 220px,
+    260px 260px;
+  opacity: .22;
+  mix-blend-mode: multiply;
+}
 
 /* Circular avatar above title */
 .avatar-wrap { display: grid; place-items: center; margin-bottom: 8px; position: relative; }
@@ -112,7 +179,14 @@ a { color: inherit; text-decoration: none; }
 .btn.ghost { background: color-mix(in srgb, var(--bg), transparent 40%); }
 
 /* Hero (Fullscreen Minimal) */
-.hero { min-height: 100svh; display: grid; align-items: center; padding: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 6%), var(--bg)); }
+.hero {
+  min-height: 100svh; display: grid; align-items: center; padding: 0;
+  background-image:
+    radial-gradient(800px 600px at 20% 10%, color-mix(in srgb, var(--art-1), transparent 88%), transparent 60%),
+    radial-gradient(900px 650px at 80% 18%, color-mix(in srgb, var(--art-2), transparent 88%), transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg), #000 6%), var(--bg));
+  background-blend-mode: soft-light, soft-light, normal;
+}
 .hero .hero-inner { text-align: center; padding-top: 72px; padding-bottom: 24px; }
 .hero-title { font-size: clamp(32px, 6vw, 64px); margin: 0 0 12px; letter-spacing: -0.02em; }
 .hero-sub { margin: 0 auto 22px; color: var(--muted); max-width: 60ch; }
@@ -146,6 +220,7 @@ a { color: inherit; text-decoration: none; }
 .masonry { column-count: 3; column-gap: 18px; }
 .masonry .card { display: inline-block; width: 100%; margin: 0 0 18px; break-inside: avoid; -webkit-column-break-inside: avoid; position: relative; }
 .masonry .card img { width: 100%; height: auto; border: 6px solid var(--frame); border-radius: 14px; box-shadow: 0 8px 22px rgba(0,0,0,.18); transition: transform .2s ease, box-shadow .2s ease; outline: 1px solid rgba(0,0,0,.045); }
+.masonry .card img { filter: saturate(1.05) contrast(1.04) sepia(.05); }
 .masonry .card img:hover { transform: translateY(-2px); }
 .masonry .card img:hover { box-shadow: 0 12px 26px rgba(0,0,0,.24); }
 
