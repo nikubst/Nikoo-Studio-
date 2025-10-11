@@ -42,7 +42,37 @@
     .hero-media{ margin-top:16px; display:grid; place-items:center; }
     .hero-video{ width:min(960px,100%); aspect-ratio:16/9; display:block; background:#000; border-radius:16px; border:1px solid rgba(0,0,0,.12); box-shadow: 0 6px 24px rgba(0,0,0,.25); }
     /* Gallery video styled like image cards */
-    .gallery-video{ width:100%; display:block; background:#000; border-radius:14px; border:6px solid var(--frame); box-shadow: 0 8px 22px rgba(0,0,0,.18); }
+    .gallery-video{ width:100%; display:block; background:#000; border-radius:14px; border:6px solid var(--frame); box-shadow: 0 8px 22px rgba(0,0,0,.18); outline: 1px solid rgba(0,0,0,.045); }
+    /* Ensure video inside masonry cards matches image card sizing/flow */
+    .masonry .card .gallery-video{ width:100%; height:auto; }
+
+    /* Beautify masonry spacing and unify visuals for images & videos */
+    /* Use CSS Grid for masonry to avoid column-flow empty gaps */
+    .masonry{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      column-count: initial; /* override styles.css */
+      column-gap: initial;   /* override styles.css */
+    }
+    .masonry .card{ margin: 0; }
+    .masonry .card :is(img, video){
+      width: 100%;
+      display: block;
+      aspect-ratio: 4 / 3; /* match image cards */
+      object-fit: cover;
+      border-radius: 14px;
+      border: 6px solid var(--frame);
+      box-shadow: 0 8px 22px rgba(0,0,0,.18);
+      outline: 1px solid rgba(0,0,0,.045);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .masonry .card :is(img, video):hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.24);
+    }
+    /* Slightly more breathing room above the grid */
+    #gallery .section-head{ margin-bottom: 28px; }
   </style>
 </head>
 <body>
@@ -113,38 +143,46 @@
               Your browser does not support the video tag.
             </video>
           </div>
+          <div class="card" role="listitem" data-category="video">
+            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Elephants Dream trailer clip" poster="https://upload.wikimedia.org/wikipedia/commons/6/6a/Elephants_Dream_screenshot.jpg">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4" />
+              <source src="https://media.w3.org/2010/05/elephantsdream/trailer.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="card" role="listitem" data-category="video">
+            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Tears of Steel clip">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="card" role="listitem" data-category="video">
+            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Subaru Outback on street and dirt clip">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
           <a class="card" role="listitem" data-category="dutch-golden-age" href="https://upload.wikimedia.org/wikipedia/commons/d/d7/Meisje_met_de_parel.jpg" data-title="Girl with a Pearl Earring — Johannes Vermeer">
             <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Meisje_met_de_parel.jpg" alt="Girl with a Pearl Earring by Johannes Vermeer" />
           </a>
-{{ ... }}
-        <div class="masonry-wrapper">
-          <div class="masonry" role="list" aria-label="Artworks masonry grid">
-            <div class="card" role="listitem" data-category="video">
-              <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Featured motion artwork">
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="card" role="listitem" data-category="video">
-              <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Abstract motion study">
-                <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="card" role="listitem" data-category="video">
-              <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Sintel trailer clip">
-                <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <a class="card" role="listitem" data-category="high-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/Raphael_School_of_Athens.jpg" data-title="The School of Athens — Raphael">
-              <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/Raphael_School_of_Athens.jpg?width=900" alt="The School of Athens by Raphael" />
-            </a>
-          </div>
+          <a class="card" role="listitem" data-category="ukiyo-e" href="https://upload.wikimedia.org/wikipedia/commons/0/0a/The_Great_Wave_off_Kanagawa.jpg" data-title="The Great Wave off Kanagawa — Hokusai">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/The_Great_Wave_off_Kanagawa.jpg" alt="The Great Wave off Kanagawa by Hokusai" />
+          </a>
+          <a class="card" role="listitem" data-category="high-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/The_Creation_of_Adam.jpg" data-title="The Creation of Adam — Michelangelo">
+            <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Creation_of_Adam.jpg?width=900" alt="The Creation of Adam by Michelangelo" />
+          </a>
+          <a class="card" role="listitem" data-category="northern-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/Van_Eyck_-_Arnolfini_Portrait.jpg" data-title="The Arnolfini Portrait — Jan van Eyck">
+            <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/Van_Eyck_-_Arnolfini_Portrait.jpg?width=900" alt="The Arnolfini Portrait by Jan van Eyck" />
+          </a>
+          <a class="card" role="listitem" data-category="impressionism" href="https://commons.wikimedia.org/wiki/Special:FilePath/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg" data-title="Water Lilies — Claude Monet">
+            <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/Claude_Monet_-_Water_Lilies_-_Google_Art_Project.jpg?width=900" alt="Water Lilies by Claude Monet" />
+          </a>
+          <a class="card" role="listitem" data-category="high-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/Raphael_School_of_Athens.jpg" data-title="The School of Athens — Raphael">
+            <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/Raphael_School_of_Athens.jpg?width=900" alt="The School of Athens by Raphael" />
+          </a>
         </div>
-        
+
       </div>
-{{ ... }}
 
     <!-- About (English) -->
     <section id="about" class="section">
