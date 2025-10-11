@@ -191,11 +191,79 @@
     }
     if (note) {
       note.textContent = 'Your message has been submitted. We will get back to you soon.';
-      note.style.color = '#10b981';
     }
     form.reset();
   });
 })();
+
+  // Open prompt editor when user clicks "New Prompt"
+  (function(){
+    const newBtn = document.getElementById('newPromptBtn');
+    const editor = document.getElementById('promptEditor');
+    const input = document.getElementById('promptInput');
+    if (!newBtn || !editor) return;
+    function openEditor(){
+      editor.classList.remove('hidden');
+      if (input) { input.value = ''; input.focus(); }
+      editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function closeEditor(){
+      editor.classList.add('hidden');
+      input?.blur();
+    }
+    function svgDataUrlFromText(text){
+      const w = 800, h = 600;
+      const bg = '#f1e6dc';
+      const frame = '#faf7f0';
+      const fg = '#0e1320';
+      const content = `<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>\n  <defs>\n    <filter id='grain'>\n      <feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/>\n      <feColorMatrix type='saturate' values='0'/>\n      <feBlend mode='multiply' in2='SourceGraphic'/>\n    </filter>\n  </defs>\n  <rect width='100%' height='100%' fill='${bg}'/>\n  <rect x='24' y='24' width='${w-48}' height='${h-48}' rx='18' fill='${frame}' stroke='rgba(0,0,0,0.08)' stroke-width='2'/>\n  <g filter='url(#grain)'>\n    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Vazirmatn, system-ui, -apple-system, Segoe UI, Roboto, sans-serif' font-size='28' fill='${fg}' opacity='0.9'>${(text||'New Prompt').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text>\n  </g>\n</svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(content);
+    }
+    function createPromptCard(text){
+      const grid = document.querySelector('.masonry');
+      if (!grid) return;
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.setAttribute('role', 'listitem');
+      a.setAttribute('data-category', 'prompt');
+      a.setAttribute('data-title', text || 'New Prompt');
+      const imgUrl = svgDataUrlFromText(text || 'New Prompt');
+      a.href = imgUrl; // so lightbox opens the generated SVG
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = imgUrl;
+      img.alt = (text || 'New Prompt');
+      a.appendChild(img);
+      grid.appendChild(a);
+      // rebind lightbox/download for new card if needed
+      // Trigger a mutation observer if present
+      if (typeof MutationObserver === 'undefined') {
+        // Fallback: manually click-bind if our earlier binder exists
+        a.addEventListener('click', (e) => { e.preventDefault(); });
+      }
+      a.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    newBtn.addEventListener('click', () => {
+      if (editor.classList.contains('hidden')) { openEditor(); } else { closeEditor(); }
+    });
+    input?.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        createPromptCard(input.value.trim());
+        input.value = '';
+        closeEditor();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeEditor();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !editor.classList.contains('hidden')) {
+        e.preventDefault();
+        closeEditor();
+      }
+    });
+  })();
 
 // Global download button for all images site-wide (outside gallery/avatar)
 (function(){
