@@ -27,6 +27,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Inline enhancement: subtle animated hero background and video styling */
+    .hero{
+      background-size: 140% 140%, 140% 140%, auto;
+      animation: heroDrift 22s ease-in-out infinite alternate;
+    }
+    @keyframes heroDrift{
+      0%{background-position:20% 10%,80% 18%,0 0}
+      50%{background-position:24% 14%,76% 22%,0 0}
+      100%{background-position:18% 16%,84% 14%,0 0}
+    }
+    @media (prefers-reduced-motion: reduce){ .hero{ animation: none; } }
+    .hero-media{ margin-top:16px; display:grid; place-items:center; }
+    .hero-video{ width:min(960px,100%); aspect-ratio:16/9; display:block; background:#000; border-radius:16px; border:1px solid rgba(0,0,0,.12); box-shadow: 0 6px 24px rgba(0,0,0,.25); }
+    /* Gallery video styled like image cards */
+    .gallery-video{ width:100%; display:block; background:#000; border-radius:14px; border:6px solid var(--frame); box-shadow: 0 8px 22px rgba(0,0,0,.18); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -68,36 +85,46 @@
             <img class="avatar fantasy" loading="lazy" decoding="async" width="320" height="320"
                  src="https://commons.wikimedia.org/wiki/Special:FilePath/Alexey%20Tyranov.%20Girl%20with%20hand.jpg?width=320"
                  srcset="https://commons.wikimedia.org/wiki/Special:FilePath/Alexey%20Tyranov.%20Girl%20with%20hand.jpg?width=320 1x, https://commons.wikimedia.org/wiki/Special:FilePath/Alexey%20Tyranov.%20Girl%20with%20hand.jpg?width=640 2x, https://commons.wikimedia.org/wiki/Special:FilePath/Alexey%20Tyranov.%20Girl%20with%20hand.jpg?width=960 3x"
-                 sizes="320px"
                  alt="نقاشی دختر در حال فکر با دست زیر چانه (Alexey Tyranov)"
                  style="--avatar-x:50%; --avatar-y:34%;" />
           </div>
           <h2>Art Gallery</h2>
-          <div class="prompt-actions" aria-label="Prompt tools">
-            <button id="newPromptBtn" class="btn primary" type="button">New Prompt</button>
-            <button id="copyPromptBtn" class="btn accent" type="button">Copy Prompt</button>
-          </div>
-          <div class="prompt-editor hidden" id="promptEditor">
-            <textarea id="promptInput" rows="3" placeholder="Write your prompt here..."></textarea>
-          </div>
+  <div class="prompt-actions" aria-label="Prompt tools">
+    <button id="newPromptBtn" class="btn primary" type="button">New Prompt</button>
+    <button id="copyPromptBtn" class="btn accent" type="button">Copy Prompt</button>
+  </div>
         </div>
-        
         <div class="masonry" role="list" aria-label="Artworks masonry grid">
-          <!-- New artistic selection (lightbox-ready) -->
-          <a class="card" role="listitem" data-category="renaissance" href="https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg" data-title="Mona Lisa — Leonardo da Vinci">
-            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg" alt="Mona Lisa by Leonardo da Vinci" />
-          </a>
-          <a class="card" role="listitem" data-category="renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo_da_Vinci_-_The_Last_Supper_high_res.jpg" data-title="The Last Supper — Leonardo da Vinci">
-            <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/Leonardo_da_Vinci_-_The_Last_Supper_high_res.jpg?width=900" alt="The Last Supper by Leonardo da Vinci" />
-          </a>
+      <!-- New artistic selection (lightbox-ready) -->
+          <div class="card" role="listitem" data-category="video">
+            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Featured motion artwork">
+              <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="card" role="listitem" data-category="video">
+        <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Abstract motion study">
+          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="card" role="listitem" data-category="video">
+        <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Sintel trailer clip">
+          <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <a class="card" role="listitem" data-category="renaissance" href="https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg" data-title="Mona Lisa — Leonardo da Vinci">
+        <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg" alt="Mona Lisa by Leonardo da Vinci" />
+      </a>
+      <a class="card" role="listitem" data-category="high-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/The_Creation_of_Adam.jpg" data-title="The Creation of Adam — Michelangelo">
+        <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Creation_of_Adam.jpg?width=900" alt="The Creation of Adam by Michelangelo" />
+      </a>
           <a class="card" role="listitem" data-category="dutch-golden-age" href="https://upload.wikimedia.org/wikipedia/commons/d/d7/Meisje_met_de_parel.jpg" data-title="Girl with a Pearl Earring — Johannes Vermeer">
             <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Meisje_met_de_parel.jpg" alt="Girl with a Pearl Earring by Johannes Vermeer" />
           </a>
           <a class="card" role="listitem" data-category="ukiyo-e" href="https://upload.wikimedia.org/wikipedia/commons/0/0a/The_Great_Wave_off_Kanagawa.jpg" data-title="The Great Wave off Kanagawa — Hokusai">
             <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/The_Great_Wave_off_Kanagawa.jpg" alt="The Great Wave off Kanagawa by Hokusai" />
-          </a>
-          <a class="card" role="listitem" data-category="high-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/The_Creation_of_Adam.jpg" data-title="The Creation of Adam — Michelangelo">
-            <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Creation_of_Adam.jpg?width=900" alt="The Creation of Adam by Michelangelo" />
           </a>
           <a class="card" role="listitem" data-category="northern-renaissance" href="https://commons.wikimedia.org/wiki/Special:FilePath/Van_Eyck_-_Arnolfini_Portrait.jpg" data-title="The Arnolfini Portrait — Jan van Eyck">
             <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:FilePath/Van_Eyck_-_Arnolfini_Portrait.jpg?width=900" alt="The Arnolfini Portrait by Jan van Eyck" />
