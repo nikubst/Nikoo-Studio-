@@ -55,7 +55,7 @@
       column-count: initial; /* override styles.css */
       column-gap: initial;   /* override styles.css */
     }
-    .masonry .card{ margin: 0; }
+    .masonry .card{ margin: 0; position: relative; }
     .masonry .card :is(img, video){
       width: 100%;
       display: block;
@@ -71,8 +71,44 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 26px rgba(0,0,0,.24);
     }
+    /* Download icon overlay (applies to both image and video cards) */
+    .masonry .card .dl-btn{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(0,0,0,.45);
+      color: #fff;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform .12s ease, background .2s ease, opacity .2s ease;
+      backdrop-filter: blur(6px);
+    }
+    .masonry .card .dl-btn svg{ width: 20px; height: 20px; }
+    .masonry .card:hover .dl-btn{ background: rgba(0,0,0,.6); transform: translateY(-1px); }
+    .masonry .card .dl-btn:focus{ outline: 2px solid var(--accent, #6cf); outline-offset: 2px; }
     /* Slightly more breathing room above the grid */
     #gallery .section-head{ margin-bottom: 28px; }
+
+    /* Visible download link styling under video cards */
+    .masonry .card .dl-link{
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg), transparent 40%);
+      color: inherit;
+      text-decoration: none;
+      transition: transform .1s ease, background .2s ease;
+    }
+    .masonry .card .dl-link:hover{ transform: translateY(-1px); background: color-mix(in srgb, var(--bg), transparent 20%); }
   </style>
 </head>
 <body>
@@ -127,38 +163,37 @@
         <div class="masonry" role="list" aria-label="Artworks masonry grid">
           <div class="card" role="listitem" data-category="video">
             <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Featured motion artwork">
-              <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+              <source src="assets/videos/featured_bbb.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Abstract motion study">
-              <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+              <source src="assets/videos/abstract_flower.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Sintel trailer clip">
-              <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4" />
+              <source src="assets/videos/sintel_trailer.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Elephants Dream trailer clip" poster="https://upload.wikimedia.org/wikipedia/commons/6/6a/Elephants_Dream_screenshot.jpg">
-              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4" />
-              <source src="https://media.w3.org/2010/05/elephantsdream/trailer.mp4" type="video/mp4" />
+              <source src="assets/videos/elephants_dream.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Tears of Steel clip">
-              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4" />
+              <source src="assets/videos/sintel_trailer.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Subaru Outback on street and dirt clip">
-              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4" type="video/mp4" />
+              <source src="assets/videos/subaru_outback.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
