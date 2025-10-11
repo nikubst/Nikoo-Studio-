@@ -49,110 +49,114 @@
     const cards = document.querySelectorAll('.gallery-grid .card, .masonry .card');
     cards.forEach(c => {
       // Avoid double-binding
-      if (c.dataset.lbBound === '1') return;
-      c.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = c.getAttribute('href');
-        const title = c.getAttribute('data-title') || '';
-        if (href) open(href, title);
-      c.dataset.lbBound = '1';
-    });
-
-    // Ensure each card has a download button overlay (icon-only)
-    cards.forEach(c => {
-    let btn = c.querySelector('.dl-btn');
-    if (!btn) {
-      btn = document.createElement('span');
-      btn.className = 'dl-btn';
-      btn.setAttribute('role', 'button');
-      btn.setAttribute('tabindex', '0');
-      btn.setAttribute('aria-label', 'Download image');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      c.appendChild(btn);
-    }
-    // Always ensure dataset and aria-label are correct for video cards
-    (function ensureBtnDownloadDataset(){
-      const vid = c.querySelector('video');
-      const img = c.querySelector('img');
-      const srcEl = c.querySelector('source');
-      let mediaUrl = '';
-      if (vid) {
-        mediaUrl = vid.currentSrc || (srcEl && srcEl.src) || '';
-        btn.setAttribute('aria-label', 'Download video');
-      } else if (img) {
-        mediaUrl = img.currentSrc || img.src || '';
+      if (c.dataset.lbBound !== '1') {
+        c.addEventListener('click', (e) => {
+          const href = c.getAttribute('href');
+          if (!href) return;
+          e.preventDefault();
+          const title = c.getAttribute('data-title') || '';
+          open(href, title);
+        });
+        c.dataset.lbBound = '1';
       }
-      if (!btn.dataset.download && mediaUrl) btn.dataset.download = mediaUrl;
-    })();
-    // Add a visible download link under video cards
-    const vEl = c.querySelector('video');
-    if (vEl && !c.querySelector('.dl-link')) {
-      const srcEl2 = c.querySelector('source');
-      const initialUrl = btn?.dataset.download || vEl.currentSrc || srcEl2?.src || '';
-      const link = document.createElement('a');
-      link.className = 'dl-link';
-      link.textContent = 'Download MP4';
-      link.href = initialUrl || '#';
-      link.setAttribute('download', '');
-      link.target = '_blank';
-      link.rel = 'noopener';
-      c.appendChild(link);
-    }
+      // Ensure each card has a download button overlay (icon-only)
+      let btn = c.querySelector('.dl-btn');
+      if (!btn) {
+        btn = document.createElement('span');
+        btn.className = 'dl-btn';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('tabindex', '0');
+        btn.setAttribute('aria-label', 'Download image');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        c.appendChild(btn);
+      }
+      // Always ensure dataset and aria-label are correct for video cards
+      (function ensureBtnDownloadDataset(){
+        const vid = c.querySelector('video');
+        const img = c.querySelector('img');
+        const srcEl = c.querySelector('source');
+        let mediaUrl = '';
+        if (vid) {
+          mediaUrl = vid.currentSrc || (srcEl && srcEl.src) || '';
+          btn.setAttribute('aria-label', 'Download video');
+        } else if (img) {
+          mediaUrl = img.currentSrc || img.src || '';
+        }
+        if (!btn.dataset.download && mediaUrl) btn.dataset.download = mediaUrl;
+      })();
+      // Add a visible download link under video cards
+      const vEl = c.querySelector('video');
+      if (vEl && !c.querySelector('.dl-link')) {
+        const srcEl2 = c.querySelector('source');
+        const initialUrl = btn?.dataset.download || vEl.currentSrc || srcEl2?.src || '';
+        const link = document.createElement('a');
+        link.className = 'dl-link';
+        link.textContent = 'Download MP4';
+        link.href = initialUrl || '#';
+        link.setAttribute('download', '');
+        link.target = '_blank';
+        link.rel = 'noopener';
+        c.appendChild(link);
+      }
 
-    if (!btn.dataset.bound) {
-      const handler = async (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        // Prefer explicit download dataset, else fall back to anchor href
-        let url = btn.getAttribute('href') || btn.dataset.download || c.getAttribute('href');
-        // As a last resort, re-detect from media
-        if (!url) {
-          const vid = c.querySelector('video');
-          const img = c.querySelector('img');
-          const srcEl = c.querySelector('source');
-          url = vid?.currentSrc || srcEl?.src || img?.currentSrc || img?.src || '';
-          if (url) btn.dataset.download = url;
-        }
-        if (!url) return;
-        const base = (c.getAttribute('data-title') || 'media').replace(/\s+/g,'-').toLowerCase();
-        // Try to infer extension from URL path
-        const matchExt = (() => { try { return new URL(url, location.href).pathname.match(/\.([a-z0-9]+)$/i); } catch { return null; }})();
-        let ext = (matchExt && matchExt[1]) ? matchExt[1].toLowerCase() : '';
-        try {
-          const res = await fetch(url, { mode: 'cors' });
-          if (!res.ok) throw new Error('fetch failed');
-          const blob = await res.blob();
-          // Derive extension from blob.type if URL had none or was generic
-          if (!ext && blob?.type) {
-            if (blob.type.includes('mp4')) ext = 'mp4';
-            else if (blob.type.includes('jpeg')) ext = 'jpg';
-            else if (blob.type.includes('png')) ext = 'png';
-            else if (blob.type.includes('webm')) ext = 'webm';
-            else ext = (blob.type.split('/')[1] || 'bin');
+      if (!btn.dataset.bound) {
+        const handler = async (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          // Prefer explicit download dataset, else fall back to anchor href
+          let url = btn.getAttribute('href') || btn.dataset.download || c.getAttribute('href');
+          // As a last resort, re-detect from media
+          if (!url) {
+            const vid = c.querySelector('video');
+            const img = c.querySelector('img');
+            const srcEl = c.querySelector('source');
+            url = vid?.currentSrc || srcEl?.src || img?.currentSrc || img?.src || '';
+            if (url) btn.dataset.download = url;
           }
-          // Default to mp4 for video elements
-          if (!ext && c.querySelector('video')) ext = 'mp4';
-          const name = `${base}.${ext || 'bin'}`;
-          const a = document.createElement('a');
-          const objectUrl = URL.createObjectURL(blob);
-          a.href = objectUrl;
-          a.download = name;
-          document.body.appendChild(a);
-          a.click();
-          URL.revokeObjectURL(objectUrl);
-          a.remove();
-        } catch (err) {
-          // Robust fallback for cross-origin: try direct anchor with download attribute
-          const isVideo = !!c.querySelector('video');
-          const name = `${base}.${ext || (isVideo ? 'mp4' : 'jpg')}`;
-          const a = document.createElement('a');
-          a.href = url;
-          a.setAttribute('download', name);
-          a.target = '_blank';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        }
+          if (!url) return;
+          const base = (c.getAttribute('data-title') || 'media').replace(/\s+/g,'-').toLowerCase();
+          // Try to infer extension from URL path
+          const matchExt = (() => { try { return new URL(url, location.href).pathname.match(/\.([a-z0-9]+)$/i); } catch { return null; }})();
+          let ext = (matchExt && matchExt[1]) ? matchExt[1].toLowerCase() : '';
+          try {
+            const res = await fetch(url, { mode: 'cors' });
+            if (!res.ok) throw new Error('fetch failed');
+            const blob = await res.blob();
+            // Derive extension from blob.type if URL had none or was generic
+            if (!ext && blob?.type) {
+              if (blob.type.includes('mp4')) ext = 'mp4';
+              else if (blob.type.includes('jpeg')) ext = 'jpg';
+              else if (blob.type.includes('png')) ext = 'png';
+              else if (blob.type.includes('webm')) ext = 'webm';
+              else ext = (blob.type.split('/')[1] || 'bin');
+            }
+            // Default to mp4 for video elements
+            if (!ext && c.querySelector('video')) ext = 'mp4';
+            const name = `${base}.${ext || 'bin'}`;
+            const a = document.createElement('a');
+            const objectUrl = URL.createObjectURL(blob);
+            a.href = objectUrl;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+            a.remove();
+          } catch (err) {
+            // Robust fallback for cross-origin: try direct anchor with download attribute
+            const isVideo = !!c.querySelector('video');
+            const name = `${base}.${ext || (isVideo ? 'mp4' : 'jpg')}`;
+            const a = document.createElement('a');
+            a.href = url;
+            a.setAttribute('download', name);
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }
+
+          // Keep the visible link updated too
+          const vLink = c.querySelector('.dl-link');
+          if (vLink && url) vLink.href = url;
         };
         btn.addEventListener('click', handler);
         btn.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') handler(ev); });
