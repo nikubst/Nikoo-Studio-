@@ -84,20 +84,9 @@
         }
         if (!btn.dataset.download && mediaUrl) btn.dataset.download = mediaUrl;
       })();
-      // Add a visible download link under video cards
-      const vEl = c.querySelector('video');
-      if (vEl && !c.querySelector('.dl-link')) {
-        const srcEl2 = c.querySelector('source');
-        const initialUrl = btn?.dataset.download || vEl.currentSrc || srcEl2?.src || '';
-        const link = document.createElement('a');
-        link.className = 'dl-link';
-        link.textContent = 'Download MP4';
-        link.href = initialUrl || '#';
-        link.setAttribute('download', '');
-        link.target = '_blank';
-        link.rel = 'noopener';
-        c.appendChild(link);
-      }
+      // Remove any previously added visible download links
+      const oldLink = c.querySelector('.dl-link');
+      if (oldLink) oldLink.remove();
 
       if (!btn.dataset.bound) {
         const handler = async (e) => {
