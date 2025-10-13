@@ -27,20 +27,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css" />
   <meta name="theme-color" content="#0e1320" />
   <link rel="icon" href="assets/avatar.svg" type="image/svg+xml" />
   <style>
     /* Inline enhancement: subtle animated hero background and video styling */
-    :root{ --display: 'Playfair Display', serif; --script: 'Dancing Script', cursive; }
+    :root{ --display: 'Playfair Display', serif; --script: 'Dancing Script', cursive; --accent: 'Poppins', sans-serif; }
     body{ font-family: 'Vazirmatn', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     h1, h2, h3, .about-title, .brand span, .nav a{ font-family: var(--display); letter-spacing: .2px; }
     /* Typography harmony */
     /* Headings already use Playfair via h1,h2,h3 rule. Use Playfair for lead paragraphs too. */
     #home .lead, #about .lead{ font-family: var(--display); font-weight: 600; line-height: 1.35; letter-spacing: .1px; }
-    /* Reserve script only for a subtle accent line */
-    #home .hero-note{ font-family: var(--script); font-weight: 600; letter-spacing: .2px; }
+    /* Use a clean modern accent font for the hero note */
+    #home .hero-note{
+      font-family: var(--accent);
+      font-size: 1.1em;
+      line-height: 1.45;
+      letter-spacing: .15px;
+    }
+    #home .hero-note a{
+      color: inherit;
+      font: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      display: inline-block;
+    }
     .hero{
       background-size: 140% 140%, 140% 140%, auto;
       animation: heroDrift 22s ease-in-out infinite alternate;
@@ -152,7 +167,7 @@
       <div class="container">
         <h1>Welcome to Nikoo Art</h1>
         <p class="lead">Contemporary paintings, illustrations, and fine prints.</p>
-        <div class="hero-note">Start by exploring the gallery below.</div>
+        <div class="hero-note"><a href="#gallery">Start by exploring the gallery below.</a></div>
       </div>
     </section>
 
