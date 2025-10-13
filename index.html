@@ -27,6 +27,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" content="#0e1320" />
+  <link rel="icon" href="assets/avatar.svg" type="image/svg+xml" />
   <style>
     /* Inline enhancement: subtle animated hero background and video styling */
     .hero{
@@ -155,51 +157,47 @@
                  style="--avatar-x:50%; --avatar-y:34%;" />
           </div>
           <h2>Art Gallery</h2>
-  <div class="prompt-actions" aria-label="Prompt tools">
-    <button id="newPromptBtn" class="btn primary" type="button">New Prompt</button>
-    <button id="copyPromptBtn" class="btn accent" type="button">Copy Prompt</button>
-  </div>
         </div>
         <div class="masonry" role="list" aria-label="Artworks masonry grid">
           <div class="card" role="listitem" data-category="video">
             <span class="dl-btn" role="button" tabindex="0" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Featured motion artwork">
-              <source src="assets/videos/featured_bbb.mp4" type="video/mp4" />
+            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" poster="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Big.Buck.Bunny.-.Opening.Screen.png/800px-Big.Buck.Bunny.-.Opening.Screen.png" aria-label="Featured motion artwork">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <span class="dl-btn" role="button" tabindex="0" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Abstract motion study">
-              <source src="assets/videos/abstract_flower.mp4" type="video/mp4" />
+            <video class="gallery-video" muted playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" poster="https://upload.wikimedia.org/wikipedia/commons/7/73/Sintel_movie_poster.jpg" aria-label="Sintel trailer clip">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <span class="dl-btn" role="button" tabindex="0" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" aria-label="Sintel trailer clip">
-              <source src="assets/videos/sintel_trailer.mp4" type="video/mp4" />
+            <video class="gallery-video" muted playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Elephants Dream trailer clip" poster="https://upload.wikimedia.org/wikipedia/commons/6/6a/Elephants_Dream_screenshot.jpg">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <span class="dl-btn" role="button" tabindex="0" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Elephants Dream trailer clip" poster="https://upload.wikimedia.org/wikipedia/commons/6/6a/Elephants_Dream_screenshot.jpg">
-              <source src="assets/videos/elephants_dream.mp4" type="video/mp4" />
+            <video class="gallery-video" muted playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Expressive motion clip" poster="https://upload.wikimedia.org/wikipedia/commons/f/f4/The_Scream.jpg">
+              <source src="https://samplelib.com/lib/preview/mp4/sample-10s.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <span class="dl-btn" role="button" tabindex="0" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Big Buck Bunny trailer clip">
-              <source src="assets/videos/bunny_trailer.mp4" type="video/mp4" />
+            <video class="gallery-video" muted playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" poster="https://upload.wikimedia.org/wikipedia/en/d/dd/The_Persistence_of_Memory.jpg" aria-label="Playful motion clip">
+              <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="card" role="listitem" data-category="video">
             <span class="dl-btn" role="button" tabindex="0" aria-label="Download"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <video class="gallery-video" autoplay muted loop playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" aria-label="Subaru Outback on street and dirt clip">
-              <source src="assets/videos/subaru_outback.mp4" type="video/mp4" />
+            <video class="gallery-video" muted playsinline controls controlslist="nodownload noplaybackrate" preload="metadata" poster="https://upload.wikimedia.org/wikipedia/commons/3/3f/FullMoon2010.jpg" aria-label="City nights timelapse">
+              <source src="https://samplelib.com/lib/preview/mp4/sample-30s.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
