@@ -36,8 +36,31 @@
   <style>
     /* Inline enhancement: subtle animated hero background and video styling */
     :root{ --display: 'Playfair Display', serif; --script: 'Dancing Script', cursive; --accent: 'Poppins', sans-serif; }
+    /* Artistic palette: Pastel Watercolor */
+    :root{
+      --bg: #faf7ff;          /* soft canvas */
+      --bg2: #f5fbff;         /* airy wash */
+      --surface: #ffffff;     /* card surface */
+      --card: #ffffff;
+      --primary: #7c3aed;     /* violet */
+      --accent: #ec4899;      /* pink */
+      --secondary: #22c55e;   /* green */
+      --text: #1f2937;        /* slate-800 */
+      --muted: #6b7280;       /* slate-500 */
+      --shadow: 0 10px 24px rgba(31,41,55,.08), 0 2px 6px rgba(31,41,55,.06);
+    }
+    html{ scroll-behavior: smooth; }
     body{ font-family: 'Vazirmatn', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     h1, h2, h3, .about-title, .brand span, .nav a{ font-family: var(--display); letter-spacing: .2px; }
+    body{
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(124,58,237,.10), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(236,72,153,.12), transparent 60%),
+        radial-gradient(700px 400px at 30% 120%, rgba(34,197,94,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      background-attachment: fixed;
+    }
     /* Typography harmony */
     /* Headings already use Playfair via h1,h2,h3 rule. Use Playfair for lead paragraphs too. */
     #home .lead, #about .lead{ font-family: var(--display); font-weight: 600; line-height: 1.35; letter-spacing: .1px; }
@@ -56,6 +79,30 @@
       cursor: pointer;
       display: inline-block;
     }
+    /* Buttons: pastel fills with soft hover */
+    .btn{ display:inline-flex; align-items:center; gap:.5rem; padding:.6rem 1rem; border-radius:12px; border:1px solid rgba(15,23,42,.08); box-shadow: var(--shadow); transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease; }
+    .btn.primary{ background: linear-gradient(135deg, rgba(124,58,237,.12), rgba(236,72,153,.12)); color: var(--text); }
+    .btn.accent{ background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(124,58,237,.10)); color: var(--text); }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(31,41,55,.12), 0 3px 8px rgba(31,41,55,.08); }
+    .btn:focus{ outline: 2px solid rgba(124,58,237,.35); outline-offset: 2px; }
+    
+    /* Cards: soft surfaces with lift on hover */
+    .masonry .card{ background: var(--surface); border-radius: 16px; overflow: hidden; border: 1px solid rgba(15,23,42,.06); box-shadow: var(--shadow); transition: transform .18s ease, box-shadow .2s ease; }
+    .masonry .card:hover{ transform: translateY(-2px); box-shadow: 0 16px 34px rgba(31,41,55,.12), 0 4px 10px rgba(31,41,55,.10); }
+    .masonry [data-category="video"] :is(img, video){ border-radius: 12px; }
+
+    /* Section headings underline */
+    .section-head h2, h2.about-title{ position: relative; display: inline-block; }
+    .section-head h2::after, h2.about-title::after{ content:""; position:absolute; left:0; right:0; bottom:-8px; height:6px; border-radius:6px; background: linear-gradient(90deg, rgba(124,58,237,.25), rgba(236,72,153,.25), rgba(34,197,94,.25)); }
+
+    /* Nav/link accents */
+    .nav a:hover{ color: var(--primary); }
+    a{ color: var(--primary); }
+    a:hover{ color: var(--accent); }
+
+    /* Footer */
+    footer{ background: linear-gradient(180deg, rgba(124,58,237,.05), rgba(236,72,153,.06)); }
+    footer .copy{ color: var(--muted); }
     .hero{
       background-size: 140% 140%, 140% 140%, auto;
       animation: heroDrift 22s ease-in-out infinite alternate;
@@ -264,7 +311,6 @@
         <p>Feel free to reach out for collaboration, prints, or exhibition inquiries.</p>
         <div class="about-ctas">
           <a href="#gallery" class="btn primary">Explore Gallery</a>
-          <a href="mailto:nikoo.art.gallery@gmail.com" class="btn accent">Email me</a>
         </div>
       </div>
     </section>
